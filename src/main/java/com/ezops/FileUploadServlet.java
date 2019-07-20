@@ -4,13 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.logging.Level;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -21,8 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import org.springframework.stereotype.Controller;
-
-import com.opencsv.CSVReader;
 
 @Controller
 @WebServlet(name = "FileUploadServlet", urlPatterns = {"/upload"})
@@ -88,11 +83,7 @@ public class FileUploadServlet extends HttpServlet {
                              pstmt.addBatch();// add batch
                      
                      if (i % 13 == 0)// insert when the batch size is 10
-                    	 {
-                    	 System.out.println("you have that batch size");
-                    	 int[] rows2 = pstmt.executeBatch();
-                    	 System.out.println(Arrays.toString(rows2));
-                    	 }
+                    	  pstmt.executeBatch();                    	
              }
 	    	 row = reader.readLine();
 	}
