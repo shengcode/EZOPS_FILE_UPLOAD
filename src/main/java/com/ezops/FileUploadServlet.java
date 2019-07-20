@@ -1,5 +1,6 @@
 package com.ezops;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -63,10 +64,10 @@ public class FileUploadServlet extends HttpServlet {
 	}
 	
 	private void ReadCSV(InputStream filecontent) throws IOException, SQLException{	
-		CSVReader reader=null;
 		Connection conn=null;
+		BufferedReader reader=null; 
 		try{
-       	 	reader = new CSVReader(new InputStreamReader(filecontent), ',','\'', 1);
+       	 	reader=new BufferedReader(new InputStreamReader(filecontent));
        	 	DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());   
        	 	conn = DriverManager.getConnection(dbURL, dbUser, dbPass);
        	 	String insertQuery = "Insert into titanic (passenger_id,survied,class_of_travel,"
@@ -74,32 +75,28 @@ public class FileUploadServlet extends HttpServlet {
        	 			+ "ticket,Fare, Cabin,Embarked) "
        	 			+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
        	 	PreparedStatement pstmt = conn.prepareStatement(insertQuery);
-            String[] rowData = null;
-            int i = 0;
-            while((rowData = reader.readNext()) != null){   
-            	System.out.println(rowData);
-                 for (String data : rowData)
-                {       
-               	 	System.out.println("row data is  "+ data);
-               	 	System.out.println(i%13+1);
-               	 	//System.out.println("i is "+i);
-               	 	
-               	 	
-                        pstmt.setString((i % 13+1), data);
-                        if (++i % 13 == 0)
-                                pstmt.addBatch();// add batch
-                        
-                        if (i % 13 == 0)// insert when the batch size is 10
-                       	 {
-                       	  System.out.println("you have that batch size");
-                       	 int[] rows2 = pstmt.executeBatch();
-                       	 System.out.println(Arrays.toString(rows2));
-                      
-                }
-            }
-     }
-            System.out.println("Data Successfully Uploaded");
-    }catch (Exception e){
+            String row = reader.readLine();
+	    	row = reader.readLine();
+	    	while(row!=null){
+	    	 String newRow=row.replaceAll("\"", "");
+	    	 String[] stringArray=newRow.split(",");
+	    	 int i=0;
+	    	 for (String data : stringArray)
+             {       
+            	     pstmt.setString((i % 13+1), data);
+                     if (++i % 13 == 0)
+                             pstmt.addBatch();// add batch
+                     
+                     if (i % 13 == 0)// insert when the batch size is 10
+                    	 {
+                    	 System.out.println("you have that batch size");
+                    	 int[] rows2 = pstmt.executeBatch();
+                    	 System.out.println(Arrays.toString(rows2));
+                    	 }
+             }
+	    	 row = reader.readLine();
+	}
+		}catch (Exception e){
           e.printStackTrace();
     	}finally{
     		if(conn!=null){
