@@ -33,6 +33,13 @@ ResultSet resultSet = null;
 <td><b>Password</b></td>
 <td><b>Name</b></td>
 <td><b>Email</b></td>
+<td><b>id</b></td>
+<td><b>user_id</b></td>
+<td><b>Password</b></td>
+<td><b>Name</b></td>
+<td><b>Email</b></td>
+<td><b>id</b></td>
+<td><b>user_id</b></td>
 </tr>
 <%
 try{ 
@@ -50,6 +57,13 @@ while(resultSet.next()){
 <td><%=resultSet.getString("Pclass") %></td>
 <td><%=resultSet.getString("Name") %></td>
 <td><%=resultSet.getString("Sex") %></td>
+<td><%=resultSet.getString("Age") %></td>
+<td><%=resultSet.getString("SibSp") %></td>
+<td><%=resultSet.getString("Parch") %></td>
+<td><%=resultSet.getString("Ticket") %></td>
+<td><%=resultSet.getString("Fare") %></td>
+<td><%=resultSet.getString("Cabin") %></td>
+<td><%=resultSet.getString("Embarked") %></td>
 
 </tr>
 
