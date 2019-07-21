@@ -20,13 +20,13 @@ public class Titanic_Info {
 	 private String ticket;
 	 private String fare;
 	 private String cabin;
-	 private String Embarked;
+	 private String embarked;
 	 
 	 
 	public Titanic_Info(String passenger_id, String survied, String class_of_travel, String passenger_firstname,
 			String passenger_lastname, String sex, String age, String number_of_sibspouse_aboard,
 			String number_of_parent_aboard, String ticket, String fare, String cabin, String embarked) {
-		super();
+		
 		this.passenger_id = passenger_id;
 		this.survied = survied;
 		this.class_of_travel = class_of_travel;
@@ -39,7 +39,7 @@ public class Titanic_Info {
 		this.ticket = ticket;
 		this.fare = fare;
 		this.cabin = cabin;
-		Embarked = embarked;
+		this.embarked = embarked;
 	}
 	public String getPassenger_id() {
 		return passenger_id;
@@ -114,10 +114,10 @@ public class Titanic_Info {
 		this.cabin = cabin;
 	}
 	public String getEmbarked() {
-		return Embarked;
+		return embarked;
 	}
 	public void setEmbarked(String embarked) {
-		Embarked = embarked;
+		this.embarked = embarked;
 	}
 	 
 	 

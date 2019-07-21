@@ -20,7 +20,6 @@
  <!-- dropping the existing tables and create new one -->   
  <property name = "hbm2ddl.auto">create</property>
  <!-- Mention here all the model class along with the packages -->
- <mapping class = "com.ezops.pojo.Student_Info"/>
  <mapping class = "com.ezops.pojo.Titanic_Info"/>
  </session-factory>
 </hibernate-configuration>
