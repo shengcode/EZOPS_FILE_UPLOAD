@@ -17,7 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 import org.springframework.stereotype.Controller;
+
+
 
 @Controller
 @WebServlet(name = "FileUploadServlet", urlPatterns = {"/upload"})
@@ -34,6 +41,7 @@ public class FileUploadServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 	    System.out.println("Working Directory = " +System.getProperty("user.dir"));
 	    
+	    TestHibernate();
 	    
 	    final Part filePart = request.getPart("file");
 	    InputStream filecontent = null;
@@ -97,6 +105,23 @@ public class FileUploadServlet extends HttpServlet {
     			reader.close();
     		}
     	}
+	}
+	
+	private void TestHibernate(){
+		Student_Info student =new Student_Info();
+		student.setName("testName");
+		student.setRollNo(1);
+		//SessionFactory sessionFactory =new AnnotationConfiguration.configure().buildSessionFactory();
+		
+	    SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+	    Session session=sessionFactory.openSession();
+	    session.beginTransaction();
+	    session.save(student);
+	    
+	    session.getTransaction().commit();
+	    session.close();
+	    sessionFactory.close();
+	    
 	}
 }
 
