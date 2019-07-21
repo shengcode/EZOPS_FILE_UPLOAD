@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
-@ComponentScan(basePackages="com.ezops")
+@ComponentScan(basePackages="com.ezops.controller")
 @EnableWebMvc
 public class SpringWebConfig {
 	@Bean
