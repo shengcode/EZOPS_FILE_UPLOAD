@@ -5,19 +5,19 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import com.ezops.pojo.Titanic_Info;
 
 @WebServlet( "/ViewServlet")
@@ -25,46 +25,84 @@ public class ViewServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L; 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)   
 	           throws ServletException, IOException { 
-		   	long a= DataCountHibernate();
-			System.out.println("the a is "+ a);
-	        response.setContentType("text/html");  
-	        PrintWriter out=response.getWriter();  
-	        String row=request.getParameter("row");  
-	        System.out.println("the row per page  is "+row);
-	        String spageid=request.getParameter("page");  
-	        System.out.println("the number of pages you want to show is "+spageid);
-	        int pageid=Integer.parseInt(spageid); 
-	        int total=0;
-	        if(row==null) total=10;  
-	        else total=Integer.parseInt(row);
-	        if(pageid==1){}  
-	        else{  
-	            pageid=pageid-1;  
-	            pageid=pageid*total+1;  
-	        }  
-	        List<Titanic_Info> list=RetrieveDataHibernate(pageid,total);  
-	        
-	        out.print("<h1>Page No: "+spageid+"</h1>");  
-	        out.print("<table border='1' cellpadding='4' width='60%'>");  
-	        out.print("<tr><th>Id</th><th>Name</th><th>Salary</th>");  
-	        for(Titanic_Info e:list){  
-	            out.print("<tr><td>"+e.getPassengerId()+"</td><td>"+e.getName()+"</td><td>"+e.getSex()+"</td></tr>");  
-	        }  
-	        out.print("</table>");  
-	        out.println("<form action=\"\" method=\"GET\">");
-	        //out.println("How many page: <input type=\"text\" name=\"page\"><br>");
-	        out.println("Rows per page: <input type=\"text\" name=\"row\"><br>");
-	        out.println("<input type=\"submit\" value=\"Submit\">");
-	        
-	        out.println("</form>");
-	        for(int i=1; i<=4;i++){
-	        out.print("<a href='ViewServlet?page="+ i+"&row="+row+"\'"+ ">1</a> ");  
-	        //out.print("<a href='ViewServlet?page=2'>2</a> ");  
-	        //out.print("<a href='ViewServlet?page=3'>3</a> ");  
-	        //out.print("<a href='ViewServlet?page=4'>4</a> ");  
-	        }
-	        out.print("<a href='ViewServlet?page=2&lname=3'>2</a> ");  
-	        out.close();  
+		Configuration cfg=new Configuration();
+		cfg.configure("hibernate.loaddata.xml");
+		SessionFactory factory=cfg.buildSessionFactory();
+			
+		int pageIndex = 0;
+		int totalNumberOfRecords = 0;
+		int numberOfRecordsPerPage = 50;
+		String sPageIndex = request.getParameter("pageIndex");
+		if(sPageIndex ==null){
+			pageIndex = 1;
+		}else{
+		pageIndex = Integer.parseInt(sPageIndex);
+		}
+		Session session=factory.openSession();	
+		int s = (pageIndex*numberOfRecordsPerPage) -numberOfRecordsPerPage;
+		Criteria crit = session.createCriteria(Titanic_Info.class);
+		crit.setFirstResult(s);
+		crit.setMaxResults(numberOfRecordsPerPage);
+
+		List l = crit.list();
+		Iterator it = l.iterator();
+
+		PrintWriter pw = response.getWriter();
+		pw.println("<table border=1>");
+		pw.println("<tr>");
+		pw.println("<th>PassengerId</th><th>Survied</th><th>Pclass</th>");
+		pw.println("<th>Name</th><th>Sex</th><th>Age</th>");
+		pw.println("<th>SibSp</th><th>Parch</th><th>Ticket</th>");
+		pw.println("<th>Fare</th><th>Cabin</th><th>Embarked</th>");		
+		pw.println("</tr>");
+
+		while(it.hasNext())
+		{
+		Titanic_Info titanic = (Titanic_Info)it.next();
+		pw.println("<tr>");
+		pw.println("<td>"+titanic.getPassengerId()+"</td>");
+		pw.println("<td>"+titanic.getSurvied()+"</td>");
+		pw.println("<td>"+titanic.getPclass()+"</td>");
+		pw.println("<td>"+titanic.getName()+"</td>");
+		pw.println("<td>"+titanic.getSex()+"</td>");
+		pw.println("<td>"+titanic.getAge()+"</td>");
+		pw.println("<td>"+titanic.getSibSp()+"</td>");
+		pw.println("<td>"+titanic.getParch()+"</td>");
+		pw.println("<td>"+titanic.getTicket()+"</td>");
+		pw.println("<td>"+titanic.getFare()+"</td>");
+		pw.println("<td>"+titanic.getCabin()+"</td>");
+		pw.println("<td>"+titanic.getEmbarked()+"</td>");
+		pw.println("</tr>");
+		}
+		pw.println("<table>");
+		Criteria crit1 = session.createCriteria(Titanic_Info.class).addOrder(Order.desc("PassengerId"));
+		crit1.setProjection(Projections.rowCount());
+		List l1=crit1.list();
+		// pw.println(l1.size());
+		//returns 1, as list() is used to execute the query if true will returns 1
+
+		Iterator it1 = l1.iterator();
+
+		if(it1.hasNext())
+		{
+		Object o=it1.next();
+		totalNumberOfRecords = Integer.parseInt(o.toString());
+		}
+
+		int noOfPages = totalNumberOfRecords/numberOfRecordsPerPage;
+		if(totalNumberOfRecords > (noOfPages * numberOfRecordsPerPage))
+		{
+		noOfPages = noOfPages + 1;
+		}
+
+		for(int i=1;i<=noOfPages;i++)
+		{
+		String myurl = "ViewServlet?pageIndex="+i;
+		pw.println("<a href="+myurl+">"+i+"</a>");
+		}
+
+		session.close();
+		pw.close();
 	    }  
 		private long DataCountHibernate (){
 			long count=0;			

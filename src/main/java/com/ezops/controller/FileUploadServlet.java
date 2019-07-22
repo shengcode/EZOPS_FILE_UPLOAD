@@ -51,7 +51,7 @@ public class FileUploadServlet extends HttpServlet {
 		}
         
        request.setAttribute("TableHeader", tableHeader);             
-       getServletContext().getRequestDispatcher("/jsps/display_2.jsp").forward(request, response);
+       getServletContext().getRequestDispatcher("/jsps/display.jsp").forward(request, response);
         
 	}
 	

@@ -8,10 +8,7 @@
         <form method="POST" action="../upload" enctype="multipart/form-data" >
             File:
             <input type="file" name="file" id="file" /> <br/>
-            Destination:
-            <input type="text" value="" name="destination"/>
-            </br>
-            <input type="submit" value="Upload" name="upload" id="upload" />
+            <input type="submit" value="UploadToDataBase" name="upload" id="upload" />
         </form>
         
     </body>
