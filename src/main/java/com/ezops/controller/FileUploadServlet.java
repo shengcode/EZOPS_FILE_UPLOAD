@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ import com.ezops.pojo.Titanic_Info;
 @Controller
 @WebServlet(name = "FileUploadServlet", urlPatterns = {"/upload"})
 @MultipartConfig
-public class FileUploadServlet extends HttpServlet {
+public class FileUploadServlet extends HttpServlet {	 
 	protected void doPost(HttpServletRequest request,
 	        HttpServletResponse response)
 	        throws ServletException, IOException {
@@ -48,9 +49,9 @@ public class FileUploadServlet extends HttpServlet {
 		}finally{
 			filecontent.close();
 		}
-        RetrieveDataHibernate (0,10);
-       // request.setAttribute("TableHeader", tableHeader);             
-        //getServletContext().getRequestDispatcher("/jsps/display.jsp").forward(request, response);
+        
+       request.setAttribute("TableHeader", tableHeader);             
+        getServletContext().getRequestDispatcher("/jsps/display.jsp").forward(request, response);
         
 	}
 	
@@ -119,26 +120,8 @@ public class FileUploadServlet extends HttpServlet {
 		return tableHeader;
 	}
 	
-	private void RetrieveDataHibernate (int start, int maxRows){
-		Configuration cfg=new Configuration();
-		cfg.configure("hibernate.loaddata.xml");
-		SessionFactory factory=cfg.buildSessionFactory();
-		Session session=factory.openSession();
-		// Titanic_Info is the same as entity class name NOT table name
-		String SQL_QUERY = "FROM Titanic_Info titanic ORDER BY titanic.PassengerId+'0'";
-		Query q=session.createQuery(SQL_QUERY);
-	    q.setFirstResult(start);
-	    q.setMaxResults(maxRows);
-	    List li=q.list();
-	    Iterator it=li.iterator();
-	    while(it.hasNext()){
-	    	Object o=(Object)it.next();
-	    	Titanic_Info titanic = (Titanic_Info)o;
-	    	System.out.println("Id is: " + titanic.getPassengerId());
-	    }
-	    session.close();
-	   factory.close();	
-		
-	}
+	
+	
+    
 }
 

@@ -11,19 +11,14 @@
 </head>
 <body>
  <h3> Students Information </h3>
-<button onclick="myFunction()">Click me</button>
-<table>
-<tr> 
-<% List<String> tableheader = (ArrayList<String>)request.getAttribute("TableHeader");%>
+
+<% List<String> tableheader = (ArrayList<String>)request.getAttribute("TableHeader");
 for(String s : tableheader){
 	out.print("the header us : " + s);
     out.print("<br/>");
-    <td><%=s %></td>
-}
-
-
-</tr>
-</table>
+ 
+}%>
+<a href="ViewServlet?page=1">View Employee</a>>
 
 </body>
 </html>
