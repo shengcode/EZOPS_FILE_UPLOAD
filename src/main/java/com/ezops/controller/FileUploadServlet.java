@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.util.Iterator;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -46,7 +48,7 @@ public class FileUploadServlet extends HttpServlet {
 		}finally{
 			filecontent.close();
 		}
-        RetrieveDataHibernate ();
+        RetrieveDataHibernate (0,10);
        // request.setAttribute("TableHeader", tableHeader);             
         //getServletContext().getRequestDispatcher("/jsps/display.jsp").forward(request, response);
         
@@ -117,12 +119,17 @@ public class FileUploadServlet extends HttpServlet {
 		return tableHeader;
 	}
 	
-	private void RetrieveDataHibernate (){
+	private void RetrieveDataHibernate (int start, int maxRows){
 		Configuration cfg=new Configuration();
 		cfg.configure("hibernate.loaddata.xml");
 		SessionFactory factory=cfg.buildSessionFactory();
 		Session session=factory.openSession();
-	    List li=session.createQuery("from Titanic_Info").list();
+		// Titanic_Info is the same as entity class name NOT table name
+	 	
+		Query q=session.createQuery("from Titanic_Info");
+	    q.setFirstResult(start);
+	    q.setMaxResults(maxRows);
+	    List li=q.list();
 	    Iterator it=li.iterator();
 	    while(it.hasNext()){
 	    	Object o=(Object)it.next();
