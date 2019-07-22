@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,29 +10,20 @@
 <title>Insert title here</title>
 </head>
 <body>
+ <h3> Students Information </h3>
 <button onclick="myFunction()">Click me</button>
-
-<script>
-function myFunction() {
-	var table = document.createElement('table');
-	for (var i = 1; i < 4; i++){
-	    var tr = document.createElement('tr');   
-
-	    var td1 = document.createElement('td');
-	    var td2 = document.createElement('td');
-
-	    var text1 = document.createTextNode('Text1');
-	    var text2 = document.createTextNode('Text2');
-
-	    td1.appendChild(text1);
-	    td2.appendChild(text2);
-	    tr.appendChild(td1);
-	    tr.appendChild(td2);
-
-	    table.appendChild(tr);
-	}
-	document.body.appendChild(table);
+<table>
+<tr> 
+<% List<String> tableheader = (ArrayList<String>)request.getAttribute("TableHeader");%>
+for(String s : tableheader){
+	out.print("the header us : " + s);
+    out.print("<br/>");
+    <td><%=s %></td>
 }
-</script>
+
+
+</tr>
+</table>
+
 </body>
 </html>

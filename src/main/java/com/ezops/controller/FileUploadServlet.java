@@ -14,11 +14,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import java.util.Iterator;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Controller;
 import com.ezops.pojo.Titanic_Info;
+
+
 
 
 
@@ -42,8 +46,10 @@ public class FileUploadServlet extends HttpServlet {
 		}finally{
 			filecontent.close();
 		}
-        request.setAttribute("TableHeader", tableHeader);             
-        getServletContext().getRequestDispatcher("/jsps/display.jsp").forward(request, response);
+        RetrieveDataHibernate ();
+       // request.setAttribute("TableHeader", tableHeader);             
+        //getServletContext().getRequestDispatcher("/jsps/display.jsp").forward(request, response);
+        
 	}
 	
 	private String getFileName(final Part part) {
@@ -106,9 +112,26 @@ public class FileUploadServlet extends HttpServlet {
     		}
     		session.getTransaction().commit();
     	    session.close();
-    	   sessionFactory.close();	  
+    	    sessionFactory.close();	  
     	}
 		return tableHeader;
+	}
+	
+	private void RetrieveDataHibernate (){
+		Configuration cfg=new Configuration();
+		cfg.configure("hibernate.loaddata.xml");
+		SessionFactory factory=cfg.buildSessionFactory();
+		Session session=factory.openSession();
+	    List li=session.createQuery("from Titanic_Info").list();
+	    Iterator it=li.iterator();
+	    while(it.hasNext()){
+	    	Object o=(Object)it.next();
+	    	Titanic_Info titanic = (Titanic_Info)o;
+	    	System.out.println("Id is: " + titanic.getName());
+	    }
+	    session.close();
+	   factory.close();	
+		
 	}
 }
 
