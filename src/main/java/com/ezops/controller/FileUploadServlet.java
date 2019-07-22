@@ -125,8 +125,8 @@ public class FileUploadServlet extends HttpServlet {
 		SessionFactory factory=cfg.buildSessionFactory();
 		Session session=factory.openSession();
 		// Titanic_Info is the same as entity class name NOT table name
-	 	
-		Query q=session.createQuery("from Titanic_Info");
+		String SQL_QUERY = "FROM Titanic_Info titanic ORDER BY titanic.PassengerId+'0'";
+		Query q=session.createQuery(SQL_QUERY);
 	    q.setFirstResult(start);
 	    q.setMaxResults(maxRows);
 	    List li=q.list();
@@ -134,7 +134,7 @@ public class FileUploadServlet extends HttpServlet {
 	    while(it.hasNext()){
 	    	Object o=(Object)it.next();
 	    	Titanic_Info titanic = (Titanic_Info)o;
-	    	System.out.println("Id is: " + titanic.getName());
+	    	System.out.println("Id is: " + titanic.getPassengerId());
 	    }
 	    session.close();
 	   factory.close();	
