@@ -12,12 +12,6 @@
 <body>
  <h3> Data Successfully Uploaded To MySql Database </h3>
 
-<!--  <% List<String> tableheader = (ArrayList<String>)request.getAttribute("TableHeader");
-for(String s : tableheader){
-	out.print("the header us : " + s);
-    out.print("<br/>");
- 
-}%>-->
 <a href="ViewServlet?page=1">View The Data Pagination?</a>
 
 </body>

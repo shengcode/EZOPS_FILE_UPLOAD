@@ -1,4 +1,6 @@
+com\ezops\controller\ViewServlet.class
+com\ezops\controller\MappingController.class
+com\ezops\pojo\Titanic_Info.class
 com\ezops\controller\FileUploadServlet.class
 com\ezops\config\SpringWebInitializer.class
-com\ezops\pojo\Titanic_Info.class
 com\ezops\config\SpringWebConfig.class

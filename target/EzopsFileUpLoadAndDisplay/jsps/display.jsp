@@ -10,20 +10,9 @@
 <title>Insert title here</title>
 </head>
 <body>
- <h3> Students Information </h3>
-<button onclick="myFunction()">Click me</button>
-<table>
-<tr> 
-<% List<String> tableheader = (ArrayList<String>)request.getAttribute("TableHeader");%>
-for(String s : tableheader){
-	out.print("the header us : " + s);
-    out.print("<br/>");
-    <td><%=s %></td>
-}
+ <h3> Data Successfully Uploaded To MySql Database </h3>
 
-
-</tr>
-</table>
+<a href="ViewServlet?page=1">View The Data Pagination?</a>
 
 </body>
 </html>
