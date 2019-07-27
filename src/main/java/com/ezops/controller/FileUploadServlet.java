@@ -25,8 +25,7 @@ import com.ezops.pojo.Titanic_Info;
 @Controller
 @WebServlet(name = "FileUploadServlet", urlPatterns = { "/upload" })
 @MultipartConfig
-public class FileUploadServlet extends HttpServlet {
-	
+public class FileUploadServlet extends HttpServlet {	
 	
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
